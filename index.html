@@ -80,7 +80,27 @@
   .cover-meta-item {}
   .cover-meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 3px; }
   .cover-meta-value { font-size: 14px; color: var(--white); font-weight: 500; }
+<div id="paste-screen" style="display:flex; position:fixed; inset:0; background:rgba(13,31,60,0.97); z-index:999; flex-direction:column; align-items:center; justify-content:center; padding:24px;">
+  <div style="font-family:serif; font-size:22px; color:#fff; margin-bottom:16px;">Load Report Data</div>
+  <div style="font-size:13px; color:#8a9bb5; margin-bottom:20px; text-align:center; max-width:320px;">Paste the JSON block from Claude to populate the report</div>
+  <textarea id="json-paste" style="width:100%; max-width:440px; height:180px; font-family:monospace; font-size:12px; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.15); border-radius:12px; padding:14px; color:#fff; outline:none; resize:none; margin-bottom:12px;" placeholder='Paste JSON here...'></textarea>
+  <div id="paste-error" style="display:none; color:#fca5a5; font-size:13px; margin-bottom:10px;">Invalid JSON — please check and try again</div>
+  <button onclick="loadFromPaste()" style="width:100%; max-width:440px; padding:14px; font-size:15px; font-weight:600; background:linear-gradient(135deg,#1e5cb3,#3b82f6); color:#fff; border:none; border-radius:12px; cursor:pointer;">Load report</button>
+</div>
 
+<script>
+function loadFromPaste() {
+  const raw = document.getElementById('json-paste').value;
+  try {
+    const clean = raw.replace(/```json|```/g, '').trim();
+    const data = JSON.parse(clean);
+    loadReport(data);
+    document.getElementById('paste-screen').style.display = 'none';
+  } catch(e) {
+    document.getElementById('paste-error').style.display = 'block';
+  }
+}
+</script>
   /* Body */
   .body { max-width: 600px; margin: 0 auto; padding: 32px 24px 60px; }
 
